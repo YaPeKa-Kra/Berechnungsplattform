@@ -8,11 +8,11 @@ from plotly.subplots import make_subplots
 class FahrzeugParameter:
     def __init__(self):
         self.g = 9.81
-        self.Masse_leer = float(input("Masse leer eingeben in kg: "))
-        self.Masse_Cab_Src = float(input("Masse Kabine und SRC eingeben in kg: "))
-        self.Masse_Nutzlast = float(input("Masse Nutzlast eingeben in kg: "))
-        self.Anzahl_Raeder = float(input("Anzahl Räder eingeben: "))
-        self.Raddurchmesser = float(input("Raddurchmesser eingeben in m: "))
+        self.Masse_leer = float(input("Masse leer eingeben in kg: ")) # Aus Tabelle
+        self.Anbauteile = float(input("Masse Kabine und SRC eingeben in kg: ")) # Aus Tabelle
+        self.Masse_Nutzlast = float(input("Masse Nutzlast eingeben in kg: ")) # Aus Tabelle
+        self.Anzahl_Raeder = float(input("Anzahl Räder eingeben: ")) # Aus Tabelle
+        self.Raddurchmesser = float(input("Raddurchmesser eingeben in m: ")) # Aus Tabelle
         self.Reibungskoeffizent_urr = float(input("Reibungskoeffizient der Unterlage eingeben: "))
         self.Anzahl_Antrieb_n = float(input("Anzahl Antriebe eingeben: "))
         self.Batterie_Kapazitaet = float(input("Batteriekapazität eingeben in kWh: "))
@@ -25,6 +25,7 @@ class FahrzeugParameter:
         self.Getriebe_uebersetzung = float(input("Getriebeübersetzung eingeben: "))
         self.Beschleunigung_a = float(input("Beschleunigung eingeben in m/s^2: "))
 
+        # Eingabe Anzahl Sektor muss größer sein als 0 ansonsten wird eine Fehlermeldung ausgegeben
         self.Anzahl_Sektoren = int(input("Anzahl Sektoren eingeben: "))
         while True:
             try:
@@ -43,7 +44,7 @@ class FahrzeugParameter:
             self.sektor_parameter.append({"Laenge": Sektor_Laenge, "Gefälle": Sektor_Gefälle, "Geschwindigkeit": Sektor_Geschwindigkeit}) 
 
         # Berechnung aus den Eingaben
-        self.Gesamtmasse = self.Masse_leer + self.Masse_Cab_Src + self.Masse_Nutzlast
+        self.Gesamtmasse = self.Masse_leer + self.Anbauteile + self.Masse_Nutzlast
         self.Gewichtskraft = self.Gesamtmasse * self.g
         self.Batterie_Kapazitaet_Start_kWh = self.Batterie_Kapazitaet * self.Batterie_Ladestatus_Start / 100
 
