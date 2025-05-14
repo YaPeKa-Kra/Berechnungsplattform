@@ -1,0 +1,110 @@
+Formeln - Antriebsauslegung:
+
+1. Allgemein:
+
+Normalkraft:
+(Masse_leer + Masse cab_src+Nutzlast)*g*cos(Steigung)
+
+Rollwiderstand pro Rad:
+
+Rollreibungskoeff*(Normalkraft / Anzahl raeder)
+
+Steigungswiderstand pro Rad:
+
+(Masse_Leer + Masse Cab_src + Nutzlast)*g/Anzahl_raeder)*sin(Steigung)
+
+2. Konst. Geschwindigkeit:
+
+Gesamtwiderstand konstant / Rad:
+
+Rollwiderstand + Steigungswiderstand
+
+Kraft konstant / Rad:
+ 
+Gesamtwiderstand konstant * Sicherheitsfaktor
+
+Leistung pro Rad:
+
+(Anzahl Raeder / Anzahl Antriebe)*Kraft konstant/Rad * Geschwindigkeit/3,6
+
+Leistung Pro Motor:
+
+Leistung pro Rad / Wirkungsgrad Antrieb
+
+Drehmoment:
+(Anzahl Räder/Anzahl antriebe) * Kraft konst / Rad * Raddurchmesser/2
+
+Drehzahl:
+
+((Geschwindigkeit*1000) / (Raddurchmesser*pi))/60
+
+Drehmoment Motor:
+
+Drehzahl / Getriebeübersetzung
+
+Drehzahl Motor 1m^4:
+
+((Geschwindigkeit*1000) / (Raddurchmesser*pi))*Getriebeübersetzung/60
+
+
+3. Berechnung Beschleunigung
+
+Beschleunigungswiderstand / Rad:
+
+Bremsen: ((Masse_leer + Masse_cab_ssrc + Masse_Nutzlast) / Anzahl_Raeder))*Bremsverzögerung a
+Beschl: ((Masse_leer + Masse_cab_ssrc + Masse_Nutzlast) / Anzahl_Raeder))*beschleunigung a
+
+Gesamtwiderstand Beschl. / Rad [N]:
+
+Gesamtwiderstand konstant + Beschleunigungswiderstand
+
+Kraft beschl / Rad:
+
+Gesamtwiderstand Beschl. / Rad * Sicherheitsfaktor
+
+Beschl. Leistung pro Rad: 
+
+(Anzahl Raeder / Anzahl Antrieb)*Kraft beschl*Geschwindigkeit / 3.6
+
+Beschl. Leistung pro Motor:
+
+Beschl Leistung pro Rad / Wirkungsgrad Antrieb
+
+Beschl. Drehmoment pro Rad:
+
+(Anzahl Raeder / Anzahl Antrieb)*Kraft beschl.proRad*(Raddurchmesser/2)
+
+Drahzahl pro Rad:
+
+Drehzahl pro Motor / Getriebeübersetzung
+
+Drehmoment pro Motor in Nm:
+
+Drehmoment pro Rad / Getriebeübersetzung
+
+Drehzahl pro Motor in 1/min
+
+(Geschwindigkeit*1000/60)/(Raddruchmesser * pi)*Getriebeübersetzung
+
+Länge kumuliert:
+
+if Sektor = 0 then 0 
+	else if
+Länge kumuliert + Länge bereinigt
+
+Höhendifferenz:
+
+if Sektor = 0 then 0
+	else
+steigung * Länge bereinigt * 1000
+
+if Sektor = 0 then 0
+	else 
+Höhe Absolut + Höhendifferenz
+
+Dauer der Bewegung:
+Geschwindigkeit/3.6 - Geschwindigkeit vorher/3.6
+
+
+
+
