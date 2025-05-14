@@ -3,6 +3,8 @@ import math
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+#input code:
+
 class FahrzeugParameter:
     def __init__(self):
         self.g = 9.81
@@ -49,8 +51,7 @@ class FahrzeugParameter:
         print("Gewichtskraft: ", self.Gewichtskraft, "N")
         print("Batteriekapazität Start: ", self.Batterie_Kapazitaet_Start_kWh, "kWh")
 
-
-#  ... (vorheriger Code)
+# Berechnungscode:
 
 class FahrzeugBerechnungen:
     def __init__(self, fahrzeug_parameter):
