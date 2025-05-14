@@ -310,7 +310,8 @@ fahrzeug_berechnungen = FahrzeugBerechnungen(fahrzeug_parameter)
 df_sektor_daten = fahrzeug_berechnungen.berechne_sektor_daten()
 
 # Exportiere den DataFrame als Textdatei
-df_sektor_daten.to_string('sektor_daten.txt', index=False)
+df_name = input("Bitte geben Sie den Dateinamen für den Dataframe ein: ") + ".txt"
+df_name = df_sektor_daten.to_string('sektor_daten.txt', index=False)
 
 # Erstellen und Speichern des Plots
 fig = make_subplots(specs=[[{"secondary_y": True}]])
@@ -328,8 +329,6 @@ spalten_plotten = [
     "Hoehendifferenz", "Hoehe_Absolut", "Dauer_der_Bewegung", "Beschleunigung_zwischen_Sektoren",
     "Geschwindigkeit"
 ] # "Sektor_Reibung" - derzeit nicht verwendet
-
-
 
 for spalte in spalten_plotten:
     fig.add_trace(
