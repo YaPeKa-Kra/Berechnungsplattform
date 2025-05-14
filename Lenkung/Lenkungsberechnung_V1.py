@@ -1,6 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+""" 20240514: unfertige Variante V1, geplante Änderungen:
+    - statt Streckfaktor soll Drehwinkel vom User eingegeben werden
+    - resultierend aus dieser Winkeländerung soll der Zylinderhub bestimmt werden können"""
+
 def Zylinder_Bewegung(hebelarm, a_x, a_y, streckfaktor):
     """
     Berechnet die Winkeländerung und den neuen Punkt B' und visualisiert die Bewegung skaliert,
@@ -16,6 +20,7 @@ def Zylinder_Bewegung(hebelarm, a_x, a_y, streckfaktor):
         tuple: Ein Tupel mit dem neuen Winkel (in Grad) und den Koordinaten des neuen Punkts B' als NumPy-Array.
                Gibt None zurück, wenn keine realen Lösungen existieren.
     """
+
     r = hebelarm
     ax = a_x
     ay = a_y

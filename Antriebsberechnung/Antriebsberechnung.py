@@ -2,6 +2,7 @@ import pandas as pd
 import math
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+# virtualenv used: myenv 3.8.18
 
 #input code:
 
