@@ -4,10 +4,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
 
-# --- Pre defined Lists for Axle-to-Wall and Frame-to-Wall ---
-
 # --- Create axle-to-wall list ranges --- 
-
 axle_to_wall_range = np.arange(0.9, 3.3, 0.1)
 DEFINED_AXLE_TO_WALL_DISTANCES = np.round(axle_to_wall_range, 2)
 print(f"Pre-defined axle-to-wall distances: {list(DEFINED_AXLE_TO_WALL_DISTANCES)}")
