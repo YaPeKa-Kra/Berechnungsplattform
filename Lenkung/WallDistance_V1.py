@@ -3,7 +3,7 @@ import math
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-# --- Defined Lists for Axle-to-Wall and Frame-to-Wall ---
+# --- Pre defined Lists for Axle-to-Wall and Frame-to-Wall ---
 DEFINED_AXLE_TO_WALL_DISTANCES = [
     0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0,
     2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3
@@ -14,13 +14,12 @@ DEFINED_FRAME_TO_WALL_DISTANCES = [
     1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4
 ]
 
-# Standardwert für Frame to Wall Distance im Plot, wenn nicht anders angegeben
-PLOT_FRAME_TO_WALL_DISTANCE = DEFINED_FRAME_TO_WALL_DISTANCES[0] # Nimmt den ersten Wert, also 0.0m
+PLOT_FRAME_TO_WALL_DISTANCE = DEFINED_FRAME_TO_WALL_DISTANCES[0] 
 
 
-# --- Input Code: Anwendungsfall-spezifische Parameter ---
+# --- Input Code: Base Parameters added by user---
 
-class VehicleParameters:
+class BaseParameters:
     def __init__(self):
         self.half_wheelbase = float(input("Enter half wheelbase in m (e.g., 5.0 for 10m wheelbase): "))
 
@@ -51,9 +50,9 @@ class VehicleParameters:
             })
 
 
-# --- Calculation Code: Fahrdynamik und Lenkungsberechnungen ---
+# --- Calculation Code including formulas taken from excel sheet ---
 
-class VehicleCalculations:
+class CalcEngine:
     def __init__(self, vehicle_parameters):
         self.parameters = vehicle_parameters
         self.df = pd.DataFrame()
@@ -66,8 +65,6 @@ class VehicleCalculations:
         """Converts radians to degrees. Internal helper."""
         return math.degrees(radians)
 
-    # Ihre Formel für Steering Radius
-    # Erwartet steering_angle_deg in Grad, wandelt intern um
     def calculate_steering_radius_new(self, half_wheelbase, steering_angle_deg):
         """
         Calculates the steering radius using the formula: half_wheelbase / sin(steering angle deg).
@@ -84,30 +81,23 @@ class VehicleCalculations:
             
         return half_wheelbase / math.sin(steering_angle_rad)
 
-    # Ihre Formel für Axle to Center
-    # Erwartet steering_angle_deg in Grad, wandelt intern um
     def calculate_axle_to_center_new(self, steering_radius, steering_angle_deg):
         """
         Calculates axle to center using the formula: Steering radius * cos(steering angle deg).
         Assumes steering_angle_deg is in degrees and converts to radians for cos().
         """
-        # Wenn steering_radius unendlich ist, sollte axle_to_center auch unendlich sein (geradeausfahrt)
         if steering_radius == float('inf'):
             return float('inf')
 
         steering_angle_rad = self.degrees_to_radians(steering_angle_deg)
         return steering_radius * math.cos(steering_angle_rad)
 
-    # Ihre Formel für Wall to Center
-    # Erwartet Grad, keine Umwandlung nötig
     def calculate_wall_to_center_new(self, axle_to_center, axle_to_wall_distance):
         """
         Calculates wall to center using the formula: Axle to center - axle to wall.
         """
         return axle_to_center - axle_to_wall_distance
 
-    # Ihre Formel für Alpha
-    # Gibt Alpha in Grad zurück
     def calculate_alpha_new(self, wall_to_center, steering_radius):
         """
         Calculates alpha using the formula: arcsin(wall to center / steering radius).
@@ -125,8 +115,7 @@ class VehicleCalculations:
         alpha_rad = math.asin(ratio) # Result is initially in radians
         return self.radians_to_degrees(alpha_rad) # Convert to degrees
 
-    # Ihre Formel für Beta
-    # Erwartet steering_angle_deg in Grad und alpha_deg in Grad
+
     def calculate_beta_new(self, steering_angle_deg, alpha_deg):
         """
         Calculates beta using the formula: 90 - steering angle deg - alpha.
@@ -134,8 +123,7 @@ class VehicleCalculations:
         """
         return 90 - steering_angle_deg - alpha_deg
 
-    # Ihre Formel für Arc Length
-    # Erwartet beta_deg in Grad
+
     def calculate_arc_length_new(self, steering_radius, beta_deg):
         """
         Calculates arc length using the formula: 2 * pi * steering radius * (beta / 360).
@@ -145,8 +133,7 @@ class VehicleCalculations:
             return float('inf')
         return 2 * math.pi * steering_radius * (beta_deg / 360)
 
-    # Time to Collision
-    # Erwartet alpha_deg in Grad, wandelt intern um für cos()
+
     def calculate_time_to_collision(self, axle_to_wall_distance, speed, alpha_deg):
         """
         Calculates the Time to Collision (TTC) based on axle_to_wall_distance,
@@ -168,7 +155,7 @@ class VehicleCalculations:
         Performs calculations for each combination of axle_to_wall, frame_to_wall, steering angle, and speed.
         All angles are handled in degrees where possible, with internal radian conversions for math functions.
         """
-        # Listen zum Speichern der DataFrame-Daten (Alle Spalten)
+        # List to store results
         half_wheelbase_out = []
         axle_to_wall_distances_out = []
         frame_to_wall_distances_out = []
@@ -178,40 +165,36 @@ class VehicleCalculations:
         steering_radii_new_list = []
         axle_to_centers_new_list = []
         wall_to_centers_new_list = []
-        alphas_new_deg_list = [] # Alpha jetzt in Grad
+        alphas_new_deg_list = [] 
         betas_new_deg_list = []
         arc_lengths_new_list = []
-        times_list = [] # Time to Collision
+        times_list = [] 
 
         half_wheelbase_val = self.parameters.half_wheelbase
 
-        # Dreifach geschachtelte Schleifen
+        # Calculation Loop - important! 
         for current_axle_to_wall_dist in self.parameters.axle_to_wall_distances:
             for current_frame_to_wall_dist in self.parameters.frame_to_wall_distances:
                 for i, case_params in enumerate(self.parameters.steering_speed_cases):
                     current_steering_angle_deg = case_params["Steering angle"]
                     current_speed = case_params["Speed"]
 
-                    # Berechnungen basierend auf Ihren NEUEN Formeln - alles in Grad (oder intern konvertiert)
                     
                     s_radius_new = self.calculate_steering_radius_new(half_wheelbase_val, current_steering_angle_deg)
                     axle_center_new = self.calculate_axle_to_center_new(s_radius_new, current_steering_angle_deg)
                     wall_center_new = self.calculate_wall_to_center_new(axle_center_new, current_axle_to_wall_dist)
-                    
-                    # Alpha wird jetzt direkt in Grad zurückgegeben
+
                     alpha_new_deg = self.calculate_alpha_new(wall_center_new, s_radius_new)
-                    
-                    # Beta erwartet alpha in Grad
+
                     beta_new_deg = self.calculate_beta_new(current_steering_angle_deg, alpha_new_deg)
                     
                     arc_len_new = self.calculate_arc_length_new(s_radius_new, beta_new_deg)
 
-                    # Time to Collision erwartet alpha in Grad (wird intern umgewandelt)
                     time_to_collision_val = self.calculate_time_to_collision(
                         current_axle_to_wall_dist, current_speed, alpha_new_deg
                     )
 
-                    # Alle Ergebnisse zu den Listen hinzufügen
+                    # Store results in prepared lists
                     half_wheelbase_out.append(half_wheelbase_val)
                     axle_to_wall_distances_out.append(current_axle_to_wall_dist)
                     frame_to_wall_distances_out.append(current_frame_to_wall_dist)
@@ -221,12 +204,12 @@ class VehicleCalculations:
                     steering_radii_new_list.append(s_radius_new)
                     axle_to_centers_new_list.append(axle_center_new)
                     wall_to_centers_new_list.append(wall_center_new)
-                    alphas_new_deg_list.append(alpha_new_deg) # Alpha jetzt in Grad
+                    alphas_new_deg_list.append(alpha_new_deg)
                     betas_new_deg_list.append(beta_new_deg)
                     arc_lengths_new_list.append(arc_len_new)
                     times_list.append(time_to_collision_val)
 
-        # DataFrame erstellen mit allen gewünschten Spalten
+        # Create dataframe
         self.df = pd.DataFrame({
             "0.5*wheelbase (m)": half_wheelbase_out,
             "Axle to Wall Distance (m)": axle_to_wall_distances_out,
@@ -237,18 +220,18 @@ class VehicleCalculations:
             "Steering Radius (m)": steering_radii_new_list,
             "Axle to Center Distance (m)": axle_to_centers_new_list,
             "Wall to Center Distance (m)": wall_to_centers_new_list,
-            "Alpha (°)": alphas_new_deg_list, # Alpha jetzt in Grad
+            "Alpha (°)": alphas_new_deg_list,
             "Beta (°)": betas_new_deg_list,
             "Arc Length (m)": arc_lengths_new_list,
             "Time (s)": times_list
         })
         return self.df
 
-# --- Verwendung der Klassen und Visualisierung ---
+# --- Class init and visu ---
 
 if __name__ == "__main__":
-    vehicle_params = VehicleParameters()
-    vehicle_calcs = VehicleCalculations(vehicle_params)
+    vehicle_params = BaseParameters()
+    vehicle_calcs = CalcEngine(vehicle_params)
     df_results = vehicle_calcs.perform_calculations()
 
     print("\n--- Calculation Results ---")
@@ -262,37 +245,37 @@ if __name__ == "__main__":
     # --- Plotting Results ---
     fig = go.Figure()
 
-    # Wir iterieren direkt über die ursprünglich eingegebenen Steering/Speed-Cases
-    # und filtern dann die Daten für die spezifische Frame to Wall Distance
+    # iterate over cases according to user input
+    # filter by wheelbase
     half_wheelbase_val_for_legend = df_results["0.5*wheelbase (m)"].iloc[0]
 
     for i, case_params in enumerate(vehicle_params.steering_speed_cases):
         steering_angle = case_params["Steering angle"]
         speed = case_params["Speed"]
 
-        # Filtern des DataFrames für den aktuellen Steering/Speed-Case UND die ausgewählte Frame to Wall Distance
+        # Filter df by steering angle, speed, and frame to wall distance
         subset_df = df_results[
             (df_results["Steering Angle (°)"] == steering_angle) &
             (df_results["Speed (m/s)"] == speed) &
             (df_results["Frame to Wall Distance (m)"] == PLOT_FRAME_TO_WALL_DISTANCE)
         ].sort_values(by="Axle to Wall Distance (m)")
 
-        # Füge den Trace zum Plot hinzu
+        # Add traces
         fig.add_trace(go.Scatter(
             x=subset_df["Axle to Wall Distance (m)"],
             y=subset_df["Time (s)"],
             mode='lines+markers',
-            # Legendenname zeigt nur Lenkwinkel und Geschwindigkeit
+            # Legend showing angle and speed according to user input
             name=f'LW: {steering_angle}° | Speed: {speed} m/s',
-            visible="legendonly" if i > 0 else True # Standardmäßig alle außer dem ersten ausblenden
+            visible="legendonly" if i > 0 else True 
         ))
 
-    # Layout des Plots anpassen
+    # Plot Layout
     fig.update_layout(
-        title=f"Time to Collision (s) vs. Axle to Wall Distance (m) (Frame-Wall: {PLOT_FRAME_TO_WALL_DISTANCE}m, Half-WB: {half_wheelbase_val_for_legend}m)", # Titel mit F-Wall und H-WB
+        title=f"Time to Collision (s) vs. Axle to Wall Distance (m) (Frame-Wall: {PLOT_FRAME_TO_WALL_DISTANCE}m, Half-WB: {half_wheelbase_val_for_legend}m)", 
         xaxis_title="Axle to Wall Distance (m)",
         yaxis_title="Time (s)",
-        legend_title="Steering/Speed Cases", # Titel der Legende vereinfacht
+        legend_title="Steering/Speed Cases", 
         legend=dict(
             orientation="v",
             yanchor="auto",
@@ -308,10 +291,10 @@ if __name__ == "__main__":
         hovermode="x unified"
     )
 
-    # Speichern des Plots als HTML-Datei
+    # Save Plot to html
     plot_filename = input("Enter filename for the HTML plot (without .html): ") + ".html"
     fig.write_html(plot_filename)
     print(f"Plot saved to {plot_filename}")
 
-    # Plot anzeigen
+    # Open plot
     fig.show()
