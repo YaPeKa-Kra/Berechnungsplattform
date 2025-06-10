@@ -2,17 +2,29 @@ import pandas as pd
 import math
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import numpy as np
 
 # --- Pre defined Lists for Axle-to-Wall and Frame-to-Wall ---
-DEFINED_AXLE_TO_WALL_DISTANCES = [
-    0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0,
-    2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3
-]
 
-DEFINED_FRAME_TO_WALL_DISTANCES = [
-    0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2,
-    1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4
-]
+# --- Create axle-to-wall list ranges --- 
+
+axle_to_wall_range = np.arange(0.9, 3.3, 0.1)
+DEFINED_AXLE_TO_WALL_DISTANCES = np.round(axle_to_wall_range, 2)
+print(f"Pre-defined axle-to-wall distances: {list(DEFINED_AXLE_TO_WALL_DISTANCES)}")
+
+frame_to_wall_range = np.arange(0, 2.4, 0.1)
+DEFINED_FRAME_TO_WALL_DISTANCES = np.round(frame_to_wall_range, 2)
+print(f"Pre-defined frame-to-wall distances: {list(DEFINED_FRAME_TO_WALL_DISTANCES)}")
+
+#DEFINED_AXLE_TO_WALL_DISTANCES = [
+    #0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0,
+    #2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3
+#]
+
+#DEFINED_FRAME_TO_WALL_DISTANCES = [
+    #0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2,
+    #1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4
+#]
 
 PLOT_FRAME_TO_WALL_DISTANCE = DEFINED_FRAME_TO_WALL_DISTANCES[0] 
 
@@ -22,7 +34,6 @@ PLOT_FRAME_TO_WALL_DISTANCE = DEFINED_FRAME_TO_WALL_DISTANCES[0]
 class BaseParameters:
     def __init__(self):
         self.half_wheelbase = float(input("Enter half wheelbase in m (e.g., 5.0 for 10m wheelbase): "))
-
         self.axle_to_wall_distances = DEFINED_AXLE_TO_WALL_DISTANCES
         self.frame_to_wall_distances = DEFINED_FRAME_TO_WALL_DISTANCES
 
@@ -48,7 +59,6 @@ class BaseParameters:
                 "Steering angle": steering_angle,
                 "Speed": speed
             })
-
 
 # --- Calculation Code including formulas taken from excel sheet ---
 
@@ -161,7 +171,6 @@ class CalcEngine:
         frame_to_wall_distances_out = []
         steering_angles_deg_list = []
         speeds_list = []
-        
         steering_radii_new_list = []
         axle_to_centers_new_list = []
         wall_to_centers_new_list = []
@@ -183,13 +192,9 @@ class CalcEngine:
                     s_radius_new = self.calculate_steering_radius_new(half_wheelbase_val, current_steering_angle_deg)
                     axle_center_new = self.calculate_axle_to_center_new(s_radius_new, current_steering_angle_deg)
                     wall_center_new = self.calculate_wall_to_center_new(axle_center_new, current_axle_to_wall_dist)
-
                     alpha_new_deg = self.calculate_alpha_new(wall_center_new, s_radius_new)
-
                     beta_new_deg = self.calculate_beta_new(current_steering_angle_deg, alpha_new_deg)
-                    
                     arc_len_new = self.calculate_arc_length_new(s_radius_new, beta_new_deg)
-
                     time_to_collision_val = self.calculate_time_to_collision(
                         current_axle_to_wall_dist, current_speed, alpha_new_deg
                     )
