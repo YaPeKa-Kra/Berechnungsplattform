@@ -4,15 +4,6 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 # virtualenv used: myenv 3.8.18
 
-axle_to_wall_distances =  [
-    0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0,
-    2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3
-]
-
-frame_to_wall_distances = DEFINED_FRAME_TO_WALL_DISTANCES = [
-    0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2,
-    1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4
-]
 
 class FahrzeugParameter:
     def __init__(self):
@@ -117,7 +108,6 @@ class FahrzeugBerechnungen:
             #reibung = sektor["Reibung"]
             geschwindigkeit = self.berechne_sektor_geschwindigkeit(i)
             sektor_geschwindigkeiten.append(geschwindigkeit) # Speichere die Geschwindigkeit
-
             normalkraft = self.berechne_normalkraft(steigung)
             rollwiderstand_pro_rad = self.berechne_rollwiderstand_pro_rad(normalkraft)
             steigungswiderstand_pro_rad = self.berechne_steigungswiderstand_pro_rad(steigung)
