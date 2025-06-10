@@ -17,7 +17,7 @@ DEFINED_FRAME_TO_WALL_DISTANCES = [
 PLOT_FRAME_TO_WALL_DISTANCE = DEFINED_FRAME_TO_WALL_DISTANCES[0] 
 
 
-# --- Input Code: Base Parameters added by user---
+# --- Input Code: Base Parameters added by user --- 
 
 class BaseParameters:
     def __init__(self):
@@ -215,7 +215,7 @@ class CalcEngine:
             "Axle to Wall Distance (m)": axle_to_wall_distances_out,
             "Frame to Wall Distance (m)": frame_to_wall_distances_out,
             "Steering Angle (°)": steering_angles_deg_list,
-            # "Steering Angle (rad)" Spalte entfernt
+            # "Steering Angle (rad)" Column not needed
             "Speed (m/s)": speeds_list,
             "Steering Radius (m)": steering_radii_new_list,
             "Axle to Center Distance (m)": axle_to_centers_new_list,
@@ -227,7 +227,7 @@ class CalcEngine:
         })
         return self.df
 
-# --- Class init and visu ---
+# --- Class init and visualisation ---
 
 if __name__ == "__main__":
     vehicle_params = BaseParameters()
