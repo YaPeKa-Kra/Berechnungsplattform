@@ -74,6 +74,28 @@ class AchsenTraegheit:
         return ergebnis_text
 
 # user input
+try:
+    la_input = float(input("Geben Sie die Achslänge (la) in Metern ein: "))
+    rw_input = float(input("Geben Sie den Radabstand (rw) in Metern ein: "))
+    rm_input = float(input("Geben Sie den Nabenmotorabstand (rm) in Metern ein: "))
+    rdm_input = float(input("Geben Sie den Differentialmotorabstand (rdm) in Metern ein: "))
+    mw_input = float(input("Geben Sie die Radmasse (mw) in Kilogramm ein: "))
+    mm_input = float(input("Geben Sie die Nabenmotormasse (mm) in Kilogramm ein: "))
+    dmm_input = float(input("Geben Sie die Differentialmotormasse (dmm) in Kilogramm ein: "))
+    ma_input = float(input("Geben Sie die Achsmasse (ma) in Kilogramm ein: "))
+    w_input = float(input("Geben Sie die Winkelbeschleunigung (w) in rad/s^2 ein: "))
+
+    # Erstellen einer Instanz der Klasse mit den Benutzereingaben
+    achse_benutzer = AchsenTraegheit(la_input, rw_input, rm_input, rdm_input, mw_input, mm_input, dmm_input, ma_input, w_input)
+
+    # Ausführen der Berechnungen und Anzeigen der Ergebnisse
+    achse_benutzer.all_results()
+
+except ValueError:
+    print("Fehler: Ungültige Eingabe. Bitte Zahlen eingeben.")
+except Exception as e:
+    print(f"Ein unerwarteter Fehler ist aufgetreten: {e}")
+
 # Testeingabe
 #la = 1.8    # [m]
 #rw = 1.8    # [m]
