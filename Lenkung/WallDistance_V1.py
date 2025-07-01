@@ -13,6 +13,11 @@ frame_to_wall_range = np.arange(0, 2.4, 0.1)
 DEFINED_FRAME_TO_WALL_DISTANCES = np.round(frame_to_wall_range, 2)
 print(f"Pre-defined frame-to-wall distances: {list(DEFINED_FRAME_TO_WALL_DISTANCES)}")
 
+# fixed angle range from 0-25° with 0.5° steps
+angle_ranges = np.arange(0, 25, 0.5)
+DEFINED_ANGLE_RANGES = np.round(angle_ranges)
+print(f"Pre-defined angle range: {list(DEFINED_ANGLE_RANGES)}")
+
 #DEFINED_AXLE_TO_WALL_DISTANCES = [
     #0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0,
     #2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3
@@ -25,7 +30,6 @@ print(f"Pre-defined frame-to-wall distances: {list(DEFINED_FRAME_TO_WALL_DISTANC
 
 PLOT_FRAME_TO_WALL_DISTANCE = DEFINED_FRAME_TO_WALL_DISTANCES[0] 
 
-
 # --- Input Code: Base Parameters added by user --- 
 
 class BaseParameters:
@@ -33,27 +37,14 @@ class BaseParameters:
         self.half_wheelbase = float(input("Enter half wheelbase in m (e.g., 5.0 for 10m wheelbase): "))
         self.axle_to_wall_distances = DEFINED_AXLE_TO_WALL_DISTANCES
         self.frame_to_wall_distances = DEFINED_FRAME_TO_WALL_DISTANCES
-
-        print(f"\nUsing {len(self.axle_to_wall_distances)} predefined axle-to-wall distances.")
-        print(f"Using {len(self.frame_to_wall_distances)} predefined frame-to_wall distances.")
-
-        self.num_steering_speed_cases = int(input("Number of steering angle/speed combinations to be calculated: "))
-        while True:
-            try:
-                if self.num_steering_speed_cases <= 0:
-                    raise ValueError("Number of cases must be greater than 0.")
-                break
-            except ValueError as e:
-                print(e)
-                self.num_steering_speed_cases = int(input("Please re-enter: "))
+        self.angles = DEFINED_ANGLE_RANGES
+        
+        speed = float(input("Enter velocity:"))
 
         self.steering_speed_cases = []
-        for i in range(self.num_steering_speed_cases):
-            print(f"\n--- Steering/Speed Case {i+1} Parameters ---")
-            steering_angle = float(input(f"Steering angle for case {i+1} in °: "))
-            speed = float(input(f"Speed for case {i+1} in m/s: "))
+        for angle in self.angles:
             self.steering_speed_cases.append({
-                "Steering angle": steering_angle,
+                "Steering angle": angle,
                 "Speed": speed
             })
 
