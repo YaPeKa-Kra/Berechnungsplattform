@@ -14,19 +14,9 @@ DEFINED_FRAME_TO_WALL_DISTANCES = np.round(frame_to_wall_range, 2)
 print(f"Pre-defined frame-to-wall distances: {list(DEFINED_FRAME_TO_WALL_DISTANCES)}")
 
 # fixed angle range from 0-25° with 0.5° steps
-angle_ranges = np.arange(0, 25, 0.5)
-DEFINED_ANGLE_RANGES = angle_ranges
-print(f"Pre-defined angle range: {list(DEFINED_ANGLE_RANGES)}")
-
-#DEFINED_AXLE_TO_WALL_DISTANCES = [
-    #0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0,
-    #2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3
-#]
-
-#DEFINED_FRAME_TO_WALL_DISTANCES = [
-    #0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2,
-    #1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4
-#]
+#angle_ranges = np.arange(0, 26, 0.5)
+#DEFINED_ANGLE_RANGES = angle_ranges
+#print(f"Pre-defined angle range: {list(DEFINED_ANGLE_RANGES)}")
 
 PLOT_FRAME_TO_WALL_DISTANCE = DEFINED_FRAME_TO_WALL_DISTANCES[0] 
 
@@ -37,12 +27,18 @@ class BaseParameters:
         self.half_wheelbase = float(input("Enter half wheelbase in m (e.g., 5.0 for 10m wheelbase): "))
         self.axle_to_wall_distances = DEFINED_AXLE_TO_WALL_DISTANCES
         self.frame_to_wall_distances = DEFINED_FRAME_TO_WALL_DISTANCES
-        self.angles = DEFINED_ANGLE_RANGES
-        
+
+        angle_start = float(input("Enter start angle in degrees: "))
+        angle_end = float(input("Enter end angle in degrees: "))
+        angle_step = float(input("Enter angle step in degrees: "))       
         speed = float(input("Enter velocity:"))
 
+        angles = np.arange(angle_start, angle_end + angle_step, angle_step).tolist()
+        self.DEFINED_ANGLE_RANGE = angles
+        print(f"Defined Angle range: {list(self.DEFINED_ANGLE_RANGE)}")
+
         self.steering_speed_cases = []
-        for angle in self.angles:
+        for angle in self.DEFINED_ANGLE_RANGE:
             self.steering_speed_cases.append({
                 "Steering angle": angle,
                 "Speed": speed
