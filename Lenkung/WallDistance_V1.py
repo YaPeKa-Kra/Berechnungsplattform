@@ -15,7 +15,7 @@ print(f"Pre-defined frame-to-wall distances: {list(DEFINED_FRAME_TO_WALL_DISTANC
 
 # fixed angle range from 0-25° with 0.5° steps
 angle_ranges = np.arange(0, 25, 0.5)
-DEFINED_ANGLE_RANGES = np.round(angle_ranges)
+DEFINED_ANGLE_RANGES = angle_ranges
 print(f"Pre-defined angle range: {list(DEFINED_ANGLE_RANGES)}")
 
 #DEFINED_AXLE_TO_WALL_DISTANCES = [
@@ -175,7 +175,6 @@ class CalcEngine:
                 for i, case_params in enumerate(self.parameters.steering_speed_cases):
                     current_steering_angle_deg = case_params["Steering angle"]
                     current_speed = case_params["Speed"]
-
                     
                     s_radius_new = self.calculate_steering_radius_new(half_wheelbase_val, current_steering_angle_deg)
                     axle_center_new = self.calculate_axle_to_center_new(s_radius_new, current_steering_angle_deg)
