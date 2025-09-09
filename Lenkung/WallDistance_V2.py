@@ -26,7 +26,6 @@ class BaseParameters:
     def __init__(self):
         self.half_wheelbase = float(input("Enter half wheelbase in m (e.g., 5.0 for 10m wheelbase): "))
         self.axle_to_wall_distances = DEFINED_AXLE_TO_WALL_DISTANCES
-        
         self.frame_to_wall_distances = DEFINED_FRAME_TO_WALL_DISTANCES
 
         angle_start = float(input("Enter start angle in degrees: "))
@@ -155,7 +154,7 @@ class CalcEngine:
         arc_lengths_new_list = []
         times_list = [] 
 
-        half_wheelbase_val = self.parameters.half_wheelbase
+        #half_wheelbase_val = self.parameters.half_wheelbase
 
         # Calculation Loop - important! 
         for current_axle_to_wall_dist in self.parameters.axle_to_wall_distances:
@@ -173,7 +172,7 @@ class CalcEngine:
                     time_to_collision_val = self.calculate_time_to_collision(current_speed, arc_len_new)
 
                     # Store results in prepared lists
-                    half_wheelbase_out.append(half_wheelbase_val)
+                    #half_wheelbase_out.append(half_wheelbase_val)
                     axle_to_wall_distances_out.append(current_axle_to_wall_dist)
                     frame_to_wall_distances_out.append(current_frame_to_wall_dist)
                     steering_angles_deg_list.append(current_steering_angle_deg)

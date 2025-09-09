@@ -1,7 +1,15 @@
-steering_radius = half_wheelbase / sin(steering_angle_rad)
-axle_to_center = steering_radius*cos(steering_angle_rad)
-wall_to_center = axle_to_center - axle_to_wall
-alpha = arcsin(wall_to_center/steering_radius)
-beta = 90-steering_angle-alpha
-arc_length = 2*pi*steering_radius*(Beta/360)
-time = arc_length/speed
+steering_radius = half_wheelbase / sin(steering_angle_rad) --> check
+vehicle_width = input --> check
+frame_to_wall = axle_to_wall - vehicle width
+
+#Frame formulas
+steering_radius = half_wheelbase / sin(steering_angle_rad) --> check
+frame_to_wall = axle_to_wall - vehicle width --> check
+axle_to_center = steering_radius*cos(steering_angle_rad) --> check
+wall_to_center = axle_to_center - axle_to_wall --> check
+steering_angle_frame = arctan((half_wheelbase+0.5)/(axle_to_center-vehicle_width)) --> check
+radius_frame = (half_wheelbase+0,5)/sin(steering_angle_frame) --> check
+alpha = arcsin(wall_to_center/radius_frame) --> check
+beta = 90-steering_angle_frame-alpha --> check
+arc_length = 2*pi*radius_frame*(Beta/360) --> check
+time = arc_length/speed --> check
