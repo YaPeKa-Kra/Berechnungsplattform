@@ -13,3 +13,5 @@ alpha = arcsin(wall_to_center/radius_frame) --> check
 beta = 90-steering_angle_frame-alpha --> check
 arc_length = 2*pi*radius_frame*(Beta/360) --> check
 time = arc_length/speed --> check
+
+
