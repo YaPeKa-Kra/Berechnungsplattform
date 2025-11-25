@@ -124,33 +124,11 @@ ELSE
     dwErrorCode := 0;   (* No error *)
 END_IF
 
-END_PROGRAM
+(* Update global status variables *)
+GVL_Joystick.System_Ready := bSystemReady;
+GVL_Joystick.Emergency_Active := bEmergencyStop;
+GVL_Joystick.CAN_Online := bCANOnline;
+GVL_Joystick.Joystick_Online := bJoystickOnline;
+GVL_Joystick.System_Error_Code := dwErrorCode;
 
-(* ============================================================================
-   GLOBAL VARIABLE LIST: GVL_Joystick
-   Description: Global variables for joystick system
-   ============================================================================ *)
-{attribute 'qualified_only'}
-VAR_GLOBAL
-    (* Configuration *)
-    CAN_BAUDRATE        : DWORD := 250000;
-    JOYSTICK_BASE_ID    : DWORD := 16#180;
-    COMM_TIMEOUT        : TIME := T#500MS;
-    CYCLE_TIME          : TIME := T#10MS;
-    
-    (* Deadzone settings *)
-    DEADZONE_X          : REAL := 5.0;
-    DEADZONE_Y          : REAL := 5.0;
-    DEADZONE_Z          : REAL := 5.0;
-    DEADZONE_THRUST     : REAL := 2.0;
-    
-    (* Thrust limits *)
-    MAX_THRUST          : REAL := 100.0;
-    MIN_THRUST          : REAL := -30.0;
-    RAMP_UP_RATE        : REAL := 50.0;
-    RAMP_DOWN_RATE      : REAL := 75.0;
-    
-    (* Status flags *)
-    System_Ready        : BOOL := FALSE;
-    Emergency_Active    : BOOL := FALSE;
-END_VAR
+END_PROGRAM

@@ -102,17 +102,22 @@ IF bNewCANMessage THEN
     
     (* Process Joystick axes message *)
     IF stCANMessage.ID = dwJoystickCANID THEN
-        (* Parse X-Axis from bytes 0-1 (high byte first) *)
-        stJoystickData.stAxisX.nRawValue := SHL(BYTE_TO_INT(stCANMessage.Data[0]), 8) 
-                                          + BYTE_TO_INT(stCANMessage.Data[1]);
+        (* Parse X-Axis from bytes 0-1 (high byte first) 
+           Using WORD intermediate to handle unsigned byte values correctly
+           before converting to signed INT for the axis value *)
+        stJoystickData.stAxisX.nRawValue := WORD_TO_INT(
+            SHL(BYTE_TO_WORD(stCANMessage.Data[0]), 8) 
+            + BYTE_TO_WORD(stCANMessage.Data[1]));
         
         (* Parse Y-Axis from bytes 2-3 *)
-        stJoystickData.stAxisY.nRawValue := SHL(BYTE_TO_INT(stCANMessage.Data[2]), 8) 
-                                          + BYTE_TO_INT(stCANMessage.Data[3]);
+        stJoystickData.stAxisY.nRawValue := WORD_TO_INT(
+            SHL(BYTE_TO_WORD(stCANMessage.Data[2]), 8) 
+            + BYTE_TO_WORD(stCANMessage.Data[3]));
         
         (* Parse Z-Axis from bytes 4-5 *)
-        stJoystickData.stAxisZ.nRawValue := SHL(BYTE_TO_INT(stCANMessage.Data[4]), 8) 
-                                          + BYTE_TO_INT(stCANMessage.Data[5]);
+        stJoystickData.stAxisZ.nRawValue := WORD_TO_INT(
+            SHL(BYTE_TO_WORD(stCANMessage.Data[4]), 8) 
+            + BYTE_TO_WORD(stCANMessage.Data[5]));
         
         (* Scale and apply deadzone to each axis *)
         ScaleAxis(stAxis := stJoystickData.stAxisX);
@@ -127,8 +132,9 @@ IF bNewCANMessage THEN
     (* Process Thrust Lever message *)
     ELSIF stCANMessage.ID = dwThrustLeverCANID THEN
         (* Parse Thrust Lever from bytes 0-1 *)
-        stJoystickData.stThrustLever.nRawValue := SHL(BYTE_TO_INT(stCANMessage.Data[0]), 8) 
-                                                + BYTE_TO_INT(stCANMessage.Data[1]);
+        stJoystickData.stThrustLever.nRawValue := WORD_TO_INT(
+            SHL(BYTE_TO_WORD(stCANMessage.Data[0]), 8) 
+            + BYTE_TO_WORD(stCANMessage.Data[1]));
         
         (* Scale and apply deadzone *)
         ScaleAxis(stAxis := stJoystickData.stThrustLever);

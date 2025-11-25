@@ -71,7 +71,19 @@ END_IF
 CASE dwInternalState OF
     0: (* Initialization state *)
         (* Initialize CAN controller with baudrate *)
-        (* Hardware-specific initialization for DIGSY Fusion S *)
+        (* NOTE: Hardware-specific initialization for DIGSY Fusion S
+           Replace the following placeholder with actual DIGSY Fusion S CAN library calls:
+           
+           Example using Intercontrol CAN library:
+           - CAN_Init(channel := 0, baudrate := dwBaudrate);
+           - Configure CAN filters as needed
+           
+           The actual implementation depends on the specific DIGSY Fusion S 
+           firmware version and installed CAN libraries. Consult the 
+           Intercontrol documentation for the correct function calls.
+        *)
+        
+        (* Placeholder: Set initialized flag after hardware init *)
         bInitDone := TRUE;
         bInitialized := TRUE;
         eStatus := CAN_STATUS_OK;
@@ -79,8 +91,22 @@ CASE dwInternalState OF
         
     1: (* Normal operation state *)
         (* Check for incoming messages *)
-        (* This is where hardware-specific CAN receive would be implemented *)
-        (* For DIGSY Fusion S, use the appropriate CAN library functions *)
+        (* NOTE: Hardware-specific CAN receive for DIGSY Fusion S
+           Replace with actual CAN library calls, for example:
+           
+           IF CAN_Receive(channel := 0, msg => stRxMessage) THEN
+               bMessageReceived := TRUE;
+               dwRxCounter := dwRxCounter + 1;
+           ELSE
+               bMessageReceived := FALSE;
+           END_IF
+           
+           The exact function names depend on the DIGSY Fusion S CAN library.
+           Common libraries include:
+           - Intercontrol CAN Driver Library
+           - CANopen Stack (if using CANopen protocol)
+           - Raw CAN access functions
+        *)
         
         (* Detect rising edge on send trigger *)
         bSendTrigger := bSendMessage AND NOT bPrevSendMessage;
@@ -88,7 +114,18 @@ CASE dwInternalState OF
         
         IF bSendTrigger THEN
             (* Transmit message *)
-            (* Hardware-specific CAN transmit for DIGSY Fusion S *)
+            (* NOTE: Hardware-specific CAN transmit for DIGSY Fusion S
+               Replace with actual CAN library calls, for example:
+               
+               IF CAN_Transmit(channel := 0, msg := stTxMessage) THEN
+                   dwTxCounter := dwTxCounter + 1;
+               ELSE
+                   dwErrorCounter := dwErrorCounter + 1;
+                   eStatus := CAN_STATUS_ERROR;
+               END_IF
+               
+               Ensure proper error handling for transmission failures.
+            *)
             dwTxCounter := dwTxCounter + 1;
         END_IF
         

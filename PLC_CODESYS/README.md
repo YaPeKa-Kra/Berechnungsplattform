@@ -22,6 +22,7 @@ PLC_CODESYS/
 ├── Joystick/
 │   ├── Gessmann_Joystick.st   # Gessmann Joystick Verarbeitung
 │   └── Thrust_Lever_Control.st # Schubhebel Steuerung
+├── GVL_Joystick.st            # Globale Variablen
 ├── Main_Control.st            # Hauptprogramm
 └── README.md                  # Diese Dokumentation
 ```
@@ -141,6 +142,15 @@ Hauptprogramm das alle Module integriert:
 - Thrust Lever Steuerung
 - Sicherheitsüberwachung
 - Fehlerbehandlung
+- Aktualisierung der globalen Statusvariablen
+
+### 5. GVL_Joystick.st
+
+Globale Variablen Liste (Global Variable List):
+- CAN Konfigurationsparameter
+- Totzone-Einstellungen
+- Schubgrenzen und Rampenraten
+- System-Statusflags (zugänglich von anderen Programmen)
 
 ## CAN-Nachrichtenformat / CAN Message Format
 
