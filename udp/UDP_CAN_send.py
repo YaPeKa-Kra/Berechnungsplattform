@@ -6,6 +6,7 @@ sock = socket.socket(socket.AF_INET,  # IPV4
                      socket.SOCK_DGRAM)  # UDP
 TARGET_IP = "10.0.0.126"
 TARGET_PORT = 5005
+start_time = time.time()
 
 """
 Send CAN message over UDP. Descriptions:
@@ -21,7 +22,7 @@ while True:
     can_dlc = 4
     can_flags = 0b00000000 # standard frame, no RTR
     can_data = bytes([0x11, 0x22, 0x33]) + b'\x00' *4  # pad to 8 bytes
-    timestamp = int(time.time()) # current time in ms
+    timestamp = int((time.time()-start_time)*1000) # current time in ms
 
     packet = struct.pack("!IBB8sI", 
                          can_id, 
