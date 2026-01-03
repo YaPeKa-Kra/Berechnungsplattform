@@ -2,27 +2,16 @@ import socket
 import struct
 import time
 
-# Network
+""" Broadcast UDP packets to all devices in subnet """
+
+FMT = "<IBB8sI"  # Little-endian: can_id, can_dlc, can_flags, can_data(8 bytes), timestamp
+Port = 5005
+BROADCAST_IP = "255.255.255.255"
 
 sock = socket.socket(socket.AF_INET,  # IPV4
                      socket.SOCK_DGRAM)  # UDP
-# TARGET_IP = "10.0.0.126" (separate PC in wlan)
-TARGET_IP = "127.0.0.1" # ATTENTION: localhost for testing, same machine
-TARGET_PORT = 5005
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 start_time = time.time()
-
-# Paketformat
-
-FMT = "<IBB8sI"
-
-"""
-Send CAN message over UDP. Descriptions:
-can_id: 11-bit identifier
-can_dlc: data length code (0-8)
-can_flags: special flags (not used here, set to 0)
-can_data: up to 8 bytes of data"
-timestamp: timestamp (ms or mcs)
-"""
 
 while True:
     can_id = 0x123
@@ -31,12 +20,12 @@ while True:
     can_data = bytes([0x11, 0x22, 0x33]) + b'\x00' *4  # pad to 8 bytes
     timestamp = int((time.time()-start_time)*1000) # current time in ms
 
-    packet = struct.pack("!IBB8sI", 
+    packet = struct.pack(FMT, 
                          can_id, 
                          can_dlc, 
                          can_flags, 
                          can_data, 
                          timestamp)
     
-    sock.sendto(packet, (TARGET_IP, TARGET_PORT))
+    sock.sendto(packet, (BROADCAST_IP, Port))
     time.sleep(1)  # wait 1 second before sending next message
